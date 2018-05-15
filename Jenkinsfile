@@ -4,7 +4,7 @@ pipeline {
     }
     environment {
       ORG               = 'jenkinsx'
-      APP_NAME          = 'REPLACE_ME_APP_NAME'
+      APP_NAME          = 'shopping_cart'
       CHARTMUSEUM_CREDS = credentials('jenkins-x-chartmuseum')
     }
     stages {
@@ -44,7 +44,7 @@ pipeline {
             // so we can retrieve the version in later steps
             sh "echo \$(jx-release-version) > VERSION"
           }
-          dir ('./charts/REPLACE_ME_APP_NAME') {
+          dir ('./charts/shopping_cart') {
             container('ruby') {
               sh "make tag"
             }
@@ -60,7 +60,7 @@ pipeline {
           branch 'master'
         }
         steps {
-          dir ('./charts/REPLACE_ME_APP_NAME') {
+          dir ('./charts/shopping_cart') {
             container('ruby') {
               sh 'jx step changelog --version v\$(cat ../../VERSION)'
 
