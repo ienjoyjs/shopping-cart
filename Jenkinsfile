@@ -46,6 +46,7 @@ pipeline {
           }
           dir ('./charts/shopping_cart') {
             container('ruby') {
+              sh "jx step git"
               sh "make tag"
             }
           }
