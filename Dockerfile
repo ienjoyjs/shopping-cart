@@ -1,4 +1,24 @@
 FROM ruby:onbuild
+
 ENV PORT 3000
 EXPOSE 3000
-CMD ["ruby", "app.rb"]
+
+# Ref: https://www.engineyard.com/blog/using-docker-for-rails
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+RUN apt-get update && \
+    apt-get install -y nodejs mysql-client postgresql-client sqlite3 vim --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV RAILS_ENV development
+ENV RAILS_LOG_TO_STDOUT true
+
+COPY Gemfile /usr/src/app/
+COPY Gemfile.lock /usr/src/app/
+RUN bundle config --global frozen 1
+RUN bundle install --without test
+
+COPY . /usr/src/app
+
+CMD ["rails", "server", "-b", "0.0.0.0"]
